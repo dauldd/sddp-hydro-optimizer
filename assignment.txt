@@ -1,0 +1,194 @@
+========================================================================
+                      RIVERVAULT CRISIS
+========================================================================
+
+Deep beneath the mossy hills, the Gnomish City of Rivervault 
+hums with activity. For centuries, the gnomes have powered their 
+bustling factories and a city with a mix of three underground 
+hydropower plants and a geothermal station, never once needing 
+to buy electricity from outsiders.
+
+But three days ago, disaster struck: 
+a massive earthquake shook the underground tunnels, collapsing 
+caverns and rupturing the geothermal pipes. The geothermal station
+went offline instantly. Repairs are underway, but it will take a 
+week before the geothermal station can produce power again.
+
+To keep the city running, the gnomes pushed their hydro plants 
+harder than ever - too hard. Yesterday, the first two plants were 
+running so fast that the riverbanks near the third plant 
+overflowed, causing costly damage and endangering a nearby village. 
+
+Today, the gnomes finally connected to the neighboring city’s 
+power grid. They can buy electricity if needed, 
+but **cannot sell any back**.
+There’s a catch: market prices have skyrocketed after similar 
+earthquakes in the region. Buying too much power may bankrupt 
+the city, but cutting supply isn’t an option—the factory and 
+a city must keep its most critical systems online.
+
+At an emergency council meeting, a gnome suggests:
+
+  "We can optimize hydropower production! I even know two… uh… 
+   forecasting guilds in the next city who can provide inflow 
+   and price predictions for the next week. We don’t know which 
+   one is better, so let’s trust them equally for now."
+
+There’s another problem: when water spills over the riverbanks, 
+it damages the environment, and the longer it stays high, 
+the more expensive the repairs. The council agrees:
+
+  "We need a plan that balances energy demand, costs, and flood
+   risk."
+
+And that’s where you come in. The gnomes need software to 
+optimize hydropower production for the coming week. 
+Can you help them?
+
+  >> Your mission: Optimize hydropower production for 7 days.
+
+------------------------------------------------------------------------
+🗺️ RIVER SYSTEM TOPOLOGY
+------------------------------------------------------------------------
+
+[Lake 1][      ↓] 
+        [Plant 1]→[Lake 2][      ↓]
+                          [Plant 2]→[Lake 3][      ↓]
+                                            [Plant 3]→
+
+Each lake has:
+  - Minimum volume: below this, the next plant can't operate
+  - Maximum volume: above this, damage occurs
+  - Critical volume: above this, the village floods (GAME OVER)
+
+Water from Lake 1 used by Power Plant 1 flows directly into Lake 2.
+Water from Lake 2 used by Power Plant 2 flows directly into Lake 3.
+
+Whenever water flows through a power plant, it always gets turned 
+into energy - none of it is wasted. The generators are colossal 
+marvels of gnomish engineering, capable of handling any torrent 
+the river dares to throw at them. 
+
+The produced energy must always match the demand, ensuring perfect 
+balance between generation and consumption.
+
+------------------------------------------------------------------------
+📦 LAKE STATUS
+------------------------------------------------------------------------
+
+| Lake   | Current | Min | Max | Critical |
+|--------|---------|-----|-----|----------|
+| Lake 1 |   200   | 150 | 250 |   300    |
+| Lake 2 |   160   | 140 | 180 |   230    |
+| Lake 3 |   190   | 110 | 150 |   200    |
+
+Water damage cost: 10 000 ₲ per unit above Max per day
+
+------------------------------------------------------------------------
+⚡ DAILY ENERGY DEMAND (Converted to water volume units)
+------------------------------------------------------------------------
+
+| Day       | Demand |
+|-----------|--------|
+| Monday    | 248.0  |
+| Tuesday   | 103.0  |
+| Wednesday |  85.0  |
+| Thursday  |  75.0  |
+| Friday    |  65.0  |
+| Saturday  |  88.0  |
+| Sunday    | 510.0  |
+
+------------------------------------------------------------------------
+💰 PRICE FORECASTS (₲ per energy unit, converted to ₲ per water unit)
+------------------------------------------------------------------------
+
+| Day       | Forecast A | Forecast B |
+|-----------|------------|------------|
+| Monday    |   950.0    | 1 050.0    |
+| Tuesday   |   850.0    | 1 000.0    |
+| Wednesday |   120.0    |   150.0    |
+| Thursday  |     4.0    |     5.0    |
+| Friday    |     2.0    |    10.0    |
+| Saturday  |   250.5    |   300.0    |
+| Sunday    |   741.0    |   790.0    |
+
+------------------------------------------------------------------------
+🌧️ INFLOW FORECASTS (Volume in water units per day)
+------------------------------------------------------------------------
+
+Lake 1:
+| Day       | Forecast A | Forecast B |
+|-----------|------------|------------|
+| Monday    |   30.0     |    9.0     |
+| Tuesday   |   31.0     |    7.0     |
+| Wednesday |   38.0     |    5.0     |
+| Thursday  |   40.0     |    3.0     |
+| Friday    |   40.0     |    1.0     |
+| Saturday  |   26.0     |    1.0     |
+| Sunday    |   25.0     |    0.0     |
+
+Lake 2:
+| Day       | Forecast A | Forecast B |
+|-----------|------------|------------|
+| Monday    |   20.0     |    0.0     |
+| Tuesday   |   30.0     |    1.0     |
+| Wednesday |   14.0     |    2.0     |
+| Thursday  |   13.0     |    2.0     |
+| Friday    |   11.0     |    0.0     |
+| Saturday  |   19.0     |    1.0     |
+| Sunday    |   27.0     |    0.0     |
+
+Lake 3:
+| Day       | Forecast A | Forecast B |
+|-----------|------------|------------|
+| Monday    |   10.0     |    5.0     |
+| Tuesday   |   11.0     |    3.0     |
+| Wednesday |   10.0     |    3.0     |
+| Thursday  |   11.0     |    2.0     |
+| Friday    |   20.0     |    0.0     |
+| Saturday  |   22.0     |    1.0     |
+| Sunday    |   32.0     |    0.0     |
+
+------------------------------------------------------------------------
+🎯 OBJECTIVE
+------------------------------------------------------------------------
+
+The council needs you to design a mathematical model that determines 
+how to operate the plants in an optimal way, taking into account all 
+uncertainties.
+
+To verify that your model produces plausible results, you were instructed 
+to use the following test scenario:
+
+🕰️ Price (in ₲) and inflows (in water units per day):
+
+| Day       | Price ₲ | Inflow Lake 1 | Inflow Lake 2 | Inflow Lake 3 |
+|-----------|---------|---------------|---------------|---------------|
+| Monday    |  950.0  |     31.0      |     21.0      |     11.0      |
+| Tuesday   |  850.0  |     30.0      |     29.0      |     10.0      |
+| Wednesday |  120.0  |     37.0      |     13.0      |      9.0      |
+| Thursday  |    5.0  |     13.0      |      3.0      |      3.0      |
+| Friday    |    2.0  |     39.0      |     12.0      |     21.0      |
+| Saturday  |  250.5  |     24.0      |     18.0      |     21.0      |
+| Sunday    |  741.0  |     27.0      |     25.0      |     30.0      |
+
+The council wants to know:
+
+What is the total cost of meeting the energy demand in this scenario 
+using the optimization model?
+
+========================================================================
+
+   ...There are whispers among the elders that, centuries ago, when 
+these hydropower plants were first built, the gnomes possessed a powerful 
+optimization method - one that has since faded into legend. 
+Curious, you scour the dusty shelves of the local library. After 
+countless hours wandering the shadowed archives, you finally uncover 
+a tattered manuscript, its pages brittle and ink faded by centuries. 
+Most of its secrets have crumbled into dust - yet three words remain, 
+etched like runes of forgotten power: “Julia lang” and “SDDP”.
+
+What could they mean? 
+
+Could this be the key to reviving the forgotten art of river 
+optimization?
